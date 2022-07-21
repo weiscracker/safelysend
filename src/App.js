@@ -121,7 +121,7 @@ class App extends React.Component {
         <Box p="1em">
           <Grid>
             <Flex w="100%" align="center" justify="space-between">
-              <Text>SafeSend</Text>
+              <Text>SafelySend</Text>
               <ConnectWalletBtn
                 updateStateCallback={this.updateStateFromConnectWalletButton}
                 connectWalletText={
