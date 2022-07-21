@@ -41,6 +41,34 @@ export const ReceiveTab = props => {
     }
   }
 
+  async function withdrawTransaction(aId) {
+    await props.state.contract.methods
+      .withdrawTransaction(aId)
+      .send({ from: props.state.account });
+  }
+
+  function withdrawTransactionButton(aTrans) {
+    if (aTrans.unlockTime * 1000 < Date.now()) {
+      return (
+        <Button
+          m={2}
+          onClick={() => {
+            withdrawTransaction(aTrans.id);
+          }}
+        >
+          Withdraw Transaction
+        </Button>
+      );
+    } else {
+      return (
+        <Text>
+          {'Time Available: ' +
+            new Date(aTrans.unlockTime * 1000).toLocaleString()}
+        </Text>
+      );
+    }
+  }
+
   function transactionList() {
     if (validTransactions[0]) {
       return validTransactions.map(trans => {
@@ -53,11 +81,7 @@ export const ReceiveTab = props => {
                 props.state.web3.utils.fromWei(trans.amount) +
                 ' ether'}
             </Text>
-            <Text>
-              {'Time Available: ' +
-                new Date(trans.unlockTime * 1000).toLocaleString()}
-            </Text>
-            <Button m={2}>Withdraw Transaction</Button>
+            {withdrawTransactionButton(trans)}
           </Box>
         );
       });

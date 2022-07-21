@@ -64,7 +64,7 @@ class App extends React.Component {
       sender: '',
       receiver: '',
       amount: 0,
-      time: 0,
+      time: 1,
       units: 3600,
       contract: '',
       web3: '',
