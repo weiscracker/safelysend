@@ -9,9 +9,9 @@ export const AboutTab = props => {
         SafelySend slows down the process of transferring eth. Use the Send tab
         to send eth to any wallet while providing the other party time to hop on
         SafelySend, go to the Withdraw tab, and verify that the transaction was
-        sent correctly. During this time, no one else can withdraw the eth. If
-        the transaction was sent to the wrong address, just head to the Abort
-        tab and revert the transaction.
+        sent correctly. During this delay time, the eth is safe and no one can
+        withdraw it. If the transaction was sent to the wrong address, or it was
+        the wrong amount, just head to the Abort tab and revert the transaction.
       </Text>
       <br></br>
       <Text>
