@@ -7,7 +7,6 @@ import {
   theme,
   Button,
   Flex,
-  Code,
 } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { SendTab } from './SendTab';
@@ -62,7 +61,7 @@ class App extends React.Component {
     this.state = {
       account: '',
       accountShort: '',
-      contractAddr: '0x3473899AD838368538c4cce66b24d557817174bB',
+      contractAddr: '0x82Cbb5a8E41EA6ad0D24C288bd70648EC42E30dF',
       abi: con.abi,
       contract: '',
       web3: '',
@@ -119,7 +118,7 @@ class App extends React.Component {
                   <AbortTab state={this.state} />
                 </TabPanel>
                 <TabPanel>
-                  <CodeTab />
+                  <CodeTab state={this.state} />
                 </TabPanel>
               </TabPanels>
             </Tabs>

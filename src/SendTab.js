@@ -33,7 +33,7 @@ export const SendTab = props => {
     await props.state.contract.methods
       .sendTransaction(
         receiver,
-        time * units,
+        parseInt(time * units),
         props.state.web3.utils.toWei(tip.toString(), 'ether')
       )
       .send({

@@ -18,6 +18,10 @@ export const ReceiveTab = props => {
   }
 
   async function getValidTransactions() {
+    if (props.state.account === '') {
+      window.alert('Please connect wallet first');
+      return;
+    }
     resetValidTransactions();
     var ans = await props.state.contract.methods
       .checkTransactionsWaitingReceiver(props.state.account)
@@ -28,16 +32,14 @@ export const ReceiveTab = props => {
         .transactionMap(x)
         .call()
         .then(function (result) {
-          var reverted = result[6];
-          var completed = result[7];
-          if (!reverted && !completed) {
+          var done = result[5];
+          if (!done) {
             var thisTrans = {
-              id: result[0],
-              sentTime: result[1],
-              from: result[2],
-              to: result[3],
-              amount: result[4],
-              unlockTime: result[5],
+              sentTime: result[0],
+              from: result[1],
+              to: result[2],
+              amount: result[3],
+              unlockTime: result[4],
             };
             addToValidTransactions(thisTrans);
           }
@@ -87,7 +89,6 @@ export const ReceiveTab = props => {
       return validTransactions.map(trans => {
         return (
           <Box p={4} m={1} border="1px" key={'Transaction:' + trans.id}>
-            <Text>{'Id: ' + trans.id}</Text>
             <Text>
               {'Sent: ' + new Date(trans.sentTime * 1000).toLocaleString()}
             </Text>
