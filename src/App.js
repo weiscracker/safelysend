@@ -12,6 +12,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { SendTab } from './SendTab';
 import { ReceiveTab } from './ReceiveTab';
 import { AbortTab } from './AbortTab';
+import { AboutTab } from './AboutTab';
 
 import con from './SafelySend.json';
 import Web3 from 'web3';
@@ -96,11 +97,15 @@ class App extends React.Component {
             </Flex>
             <Tabs>
               <TabList>
+                <Tab>About</Tab>
                 <Tab>Send</Tab>
                 <Tab>Receive</Tab>
                 <Tab>Abort</Tab>
               </TabList>
               <TabPanels>
+                <TabPanel>
+                  <AboutTab />
+                </TabPanel>
                 <TabPanel>
                   <SendTab state={this.state} />
                 </TabPanel>
