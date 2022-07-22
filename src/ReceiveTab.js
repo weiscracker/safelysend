@@ -28,8 +28,8 @@ export const ReceiveTab = props => {
         .transactionMap(x)
         .call()
         .then(function (result) {
-          var reverted = result[5];
-          var completed = result[6];
+          var reverted = result[6];
+          var completed = result[7];
           if (!reverted && !completed) {
             var thisTrans = {
               id: result[0],

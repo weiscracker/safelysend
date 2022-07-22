@@ -70,7 +70,6 @@ class App extends React.Component {
     var web3a = new Web3(Web3.givenProvider);
 
     var c = new web3a.eth.Contract(this.state.abi, this.state.contractAddr);
-
     this.setState({
       account: newState.account,
       accountShort: newState.accountShort,

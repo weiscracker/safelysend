@@ -22,14 +22,13 @@ export const AbortTab = props => {
     var ans = await props.state.contract.methods
       .checkTransactionsWaitingSender(props.state.account)
       .call();
-
     for (const x of ans) {
       props.state.contract.methods
         .transactionMap(x)
         .call()
         .then(function (result) {
-          var reverted = result[5];
-          var completed = result[6];
+          var reverted = result[6];
+          var completed = result[7];
           if (!reverted && !completed) {
             var thisTrans = {
               id: result[0],
