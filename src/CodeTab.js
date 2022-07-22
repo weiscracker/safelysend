@@ -7,7 +7,7 @@ export const CodeTab = props => {
     <Box>
       <Link
         href={
-          'https://rinkeby.etherscan.io/address/0x82Cbb5a8E41EA6ad0D24C288bd70648EC42E30dF'
+          'https://etherscan.io/address/0xb6c34f340B11daa5107972105B2DF2Fe5d1ED4B3#code'
         }
         isExternal
       >
