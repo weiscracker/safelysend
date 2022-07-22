@@ -13,7 +13,7 @@ import { SendTab } from './SendTab';
 import { ReceiveTab } from './ReceiveTab';
 import { AbortTab } from './AbortTab';
 
-import con from './SafeSend.json';
+import con from './SafelySend.json';
 import Web3 from 'web3';
 
 export const ConnectWalletBtn = props => {
@@ -59,48 +59,12 @@ class App extends React.Component {
     this.state = {
       account: '',
       accountShort: '',
-      contractAddr: '0xA8578CB6b29C489B514184Ba31c557D91037a1b7',
+      contractAddr: '0x3473899AD838368538c4cce66b24d557817174bB',
       abi: con.abi,
-      sender: '',
-      receiver: '',
-      amount: 0,
-      time: 1,
-      units: 3600,
       contract: '',
       web3: '',
-      count: 0,
     };
   }
-
-  updateSender = aSender => {
-    this.setState({ sender: aSender });
-  };
-
-  updateReceiver = aRcvr => {
-    this.setState({ receiver: aRcvr });
-  };
-
-  updateAmount = aAmt => {
-    this.setState({ amount: aAmt });
-  };
-
-  updateTime = aTime => {
-    this.setState({ time: aTime });
-  };
-
-  updateUnits = aUnits => {
-    var u = 1;
-    if (aUnits === 'hour') {
-      u = 60 * 60;
-    }
-    if (aUnits === 'day') {
-      u = 60 * 60 * 24;
-    }
-    if (aUnits === 'sec') {
-      u = 1;
-    }
-    this.setState({ units: u });
-  };
 
   updateStateFromConnectWalletButton = newState => {
     var web3a = new Web3(Web3.givenProvider);
@@ -139,23 +103,13 @@ class App extends React.Component {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <SendTab
-                    state={this.state}
-                    updateRecieverCallback={this.updateReceiver}
-                    updateSenderCallback={this.updateSender}
-                    updateAmountCallback={this.updateAmount}
-                    updateTimeCallback={this.updateTime}
-                    updateUnitsCallback={this.updateUnits}
-                  />
+                  <SendTab state={this.state} />
                 </TabPanel>
                 <TabPanel>
-                  <ReceiveTab
-                    state={this.state}
-                    forceUpdateCallback={this.forceUpdateFunc}
-                  />
+                  <ReceiveTab state={this.state} />
                 </TabPanel>
                 <TabPanel>
-                  <AbortTab />
+                  <AbortTab state={this.state} />
                 </TabPanel>
               </TabPanels>
             </Tabs>

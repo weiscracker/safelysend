@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import {
   Input,
   Table,
@@ -9,99 +10,131 @@ import {
   Select,
   Button,
   Tbody,
+  Spinner,
 } from '@chakra-ui/react';
 
 export const SendTab = props => {
+  const [processing, setProcessing] = useState(false);
+  const [receiver, setReceiver] = useState(
+    '0x0000000000000000000000000000000000000000'
+  );
+  const [amount, setAmount] = useState(0);
+  const [time, setTime] = useState(1);
+  const [units, setUnits] = useState(3600);
+  const [unitsStr, setUnitsStr] = useState('hour');
+  const [tip, setTip] = useState(0);
+
   async function sendTransaction() {
-    props.state.contract.methods
+    if (props.state.account === '') {
+      window.alert('Please connect wallet first');
+      return;
+    }
+    setProcessing(true);
+    await props.state.contract.methods
       .sendTransaction(
-        props.state.receiver,
-        props.state.time * props.state.units
+        receiver,
+        time * units,
+        props.state.web3.utils.toWei(tip.toString(), 'ether')
       )
       .send({
         from: props.state.account,
-        value: props.state.web3.utils.toWei(
-          props.state.amount.toString(),
-          'ether'
-        ),
+        value: props.state.web3.utils.toWei((amount + tip).toString(), 'ether'),
       });
-  }
-
-  function updateReceiver(val) {
-    props.updateRecieverCallback(val);
-  }
-
-  function updateAmount(val) {
-    props.updateAmountCallback(val);
-  }
-
-  function updateTime(val) {
-    props.updateTimeCallback(val);
+    setProcessing(false);
+    window.alert('Transaction Submitted');
   }
 
   function updateUnits(val) {
-    props.updateUnitsCallback(val);
+    var u = 1;
+    if (val === 'hour') {
+      u = 60 * 60;
+    }
+    if (val === 'day') {
+      u = 60 * 60 * 24;
+    }
+    if (val === 'sec') {
+      u = 1;
+    }
+    setUnits(u);
+    setUnitsStr(val);
   }
 
-  return (
-    <Table w="100%" variant="unstyled">
-      <Tbody>
-        <Tr>
-          <Th isNumeric={true}>
-            <Text>Receiver Address:</Text>
-          </Th>
-          <Td>
-            <Input
-              type="text"
-              defaultValue={'0x0000000000000000000000000000000000000000'}
-              onChange={e => updateReceiver(e.target.value)}
-            ></Input>
-          </Td>
-        </Tr>
-        <Tr>
-          <Th isNumeric={true}>
-            <Text>Amount to Send:</Text>
-          </Th>
-          <Td>
-            <Input
-              type="text"
-              defaultValue={0}
-              onChange={e => updateAmount(parseFloat(e.target.value))}
-            ></Input>
-          </Td>
-          <Td>Eth</Td>
-        </Tr>
-        <Tr>
-          <Th isNumeric={true}>
-            <Text>Delay Time:</Text>
-          </Th>
-          <Td>
-            <Input
-              type="text"
-              defaultValue={1}
-              onChange={e => updateTime(parseFloat(e.target.value))}
-            ></Input>
-          </Td>
-          <Td>
-            <Select
-              defaultValue="hour"
-              onChange={e => updateUnits(e.target.value)}
-            >
-              <option value="hour">Hour</option>
-              <option value="sec">Sec</option>
-              <option value="day">Day</option>
-            </Select>
-          </Td>
-        </Tr>
-        <Tr>
-          <Td></Td>
-          <Td>
-            <Button w="100%" onClick={sendTransaction}>
-              Send
-            </Button>
-          </Td>
-        </Tr>
-      </Tbody>
-    </Table>
-  );
+  if (!processing) {
+    return (
+      <Table w="100%" variant="unstyled">
+        <Tbody>
+          <Tr>
+            <Th isNumeric={true}>
+              <Text>Receiver Address:</Text>
+            </Th>
+            <Td>
+              <Input
+                type="text"
+                defaultValue={receiver}
+                onChange={e => setReceiver(e.target.value)}
+              ></Input>
+            </Td>
+          </Tr>
+          <Tr>
+            <Th isNumeric={true}>
+              <Text>Amount to Send:</Text>
+            </Th>
+            <Td>
+              <Input
+                type="text"
+                defaultValue={amount}
+                onChange={e => setAmount(parseFloat(e.target.value))}
+              ></Input>
+            </Td>
+            <Td>Eth</Td>
+          </Tr>
+          <Tr>
+            <Th isNumeric={true}>
+              <Text>Delay Time:</Text>
+            </Th>
+            <Td>
+              <Input
+                type="text"
+                defaultValue={time}
+                onChange={e => setTime(parseFloat(e.target.value))}
+              ></Input>
+            </Td>
+            <Td>
+              <Select
+                defaultValue={unitsStr}
+                onChange={e => updateUnits(e.target.value)}
+              >
+                <option value="hour">Hour</option>
+                <option value="sec">Sec</option>
+                <option value="day">Day</option>
+              </Select>
+            </Td>
+          </Tr>
+          <Tr>
+            <Th isNumeric={true}>
+              <Text>Optional Tip to Send to Contract:</Text>
+            </Th>
+            <Td>
+              <Input
+                type="text"
+                defaultValue={tip}
+                onChange={e => setTip(parseFloat(e.target.value))}
+              ></Input>
+            </Td>
+            <Td>Eth</Td>
+          </Tr>
+          <Tr>
+            <Td></Td>
+            <Td>
+              <Button w="100%" onClick={sendTransaction}>
+                Send
+              </Button>
+            </Td>
+          </Tr>
+        </Tbody>
+      </Table>
+    );
+  } else {
+    return <Spinner></Spinner>;
+  }
 };
