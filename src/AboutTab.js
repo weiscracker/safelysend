@@ -17,8 +17,9 @@ export const AboutTab = props => {
       <Text>
         Additionally, you have the option to send a tip to the contract while
         sending a transaction (minimal extra gas), which will support future
-        feature upgrades including email notifications, ens lookup, ERC20, and
-        more.
+        feature upgrades including email notifications, ens lookup, ERC20, gas
+        improvements, and more. Every little bit counts, and this method makes
+        sending even 0.001 eth feasible from a gas perspective.
       </Text>
       <br></br>
       <Text>-weiscracker</Text>
