@@ -34,6 +34,7 @@ export const AbortTab = props => {
           var done = result[5];
           if (!done) {
             var thisTrans = {
+              id: x,
               sentTime: result[0],
               from: result[1],
               to: result[2],
@@ -78,7 +79,13 @@ export const AbortTab = props => {
     if (validTransactions[0]) {
       return validTransactions.map(trans => {
         return (
-          <Box p={4} m={1} border="1px" key={'Transaction:' + trans.id}>
+          <Box
+            p={4}
+            m={1}
+            border="1px"
+            key={'Transaction:' + trans.sentTime + trans.to}
+          >
+            <Text>{'Id: ' + trans.id}</Text>
             <Text>
               {'Sent: ' + new Date(trans.sentTime * 1000).toLocaleString()}
             </Text>

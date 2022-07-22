@@ -15,14 +15,12 @@ import {
 
 export const SendTab = props => {
   const [processing, setProcessing] = useState(false);
-  const [receiver, setReceiver] = useState(
-    '0x0000000000000000000000000000000000000000'
-  );
-  const [amount, setAmount] = useState(0);
-  const [time, setTime] = useState(1);
+  const [receiver, setReceiver] = useState('');
+  const [amount, setAmount] = useState('0');
+  const [time, setTime] = useState('1');
   const [units, setUnits] = useState(3600);
   const [unitsStr, setUnitsStr] = useState('hour');
-  const [tip, setTip] = useState(0);
+  const [tip, setTip] = useState('0');
 
   async function sendTransaction() {
     if (props.state.account === '') {
@@ -33,12 +31,15 @@ export const SendTab = props => {
     await props.state.contract.methods
       .sendTransaction(
         receiver,
-        parseInt(time * units),
-        props.state.web3.utils.toWei(tip.toString(), 'ether')
+        parseInt(parseFloat(time) * parseFloat(units)),
+        props.state.web3.utils.toWei(tip, 'ether')
       )
       .send({
         from: props.state.account,
-        value: props.state.web3.utils.toWei((amount + tip).toString(), 'ether'),
+        value: props.state.web3.utils.toWei(
+          (parseFloat(amount) + parseFloat(tip)).toString(),
+          'ether'
+        ),
       });
     setProcessing(false);
     window.alert('Transaction Submitted');
@@ -83,7 +84,7 @@ export const SendTab = props => {
               <Input
                 type="text"
                 defaultValue={amount}
-                onChange={e => setAmount(parseFloat(e.target.value))}
+                onChange={e => setAmount(e.target.value)}
               ></Input>
             </Td>
             <Td>Eth</Td>
@@ -96,7 +97,7 @@ export const SendTab = props => {
               <Input
                 type="text"
                 defaultValue={time}
-                onChange={e => setTime(parseFloat(e.target.value))}
+                onChange={e => setTime(e.target.value)}
               ></Input>
             </Td>
             <Td>
@@ -118,7 +119,7 @@ export const SendTab = props => {
               <Input
                 type="text"
                 defaultValue={tip}
-                onChange={e => setTip(parseFloat(e.target.value))}
+                onChange={e => setTip(e.target.value)}
               ></Input>
             </Td>
             <Td>Eth</Td>

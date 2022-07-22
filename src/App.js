@@ -26,12 +26,14 @@ export const ConnectWalletBtn = props => {
         method: 'eth_requestAccounts',
       });
       var web3a = new Web3(Web3.givenProvider);
-      const network = await web3a.eth.net.getId();
-      if (network !== 4) {
-        window.alert('THIS CONTRACT IS ONLY VALID ON RINKEBY!');
+
+      const n = await web3a.eth.net.getId();
+      if (!con.networks[n]) {
+        window.alert('THIS CONTRACT IS ONLY VALID ON RINKEBY AND MAINNET!');
       } else {
         const acct = accounts[0];
         const tempState = {
+          network: n,
           account: acct,
           accountShort:
             acct.substring(0, 5) +
@@ -61,7 +63,7 @@ class App extends React.Component {
     this.state = {
       account: '',
       accountShort: '',
-      contractAddr: '0x82Cbb5a8E41EA6ad0D24C288bd70648EC42E30dF',
+      contractAddr: '',
       abi: con.abi,
       contract: '',
       web3: '',
@@ -71,8 +73,13 @@ class App extends React.Component {
   updateStateFromConnectWalletButton = newState => {
     var web3a = new Web3(Web3.givenProvider);
 
-    var c = new web3a.eth.Contract(this.state.abi, this.state.contractAddr);
+    var c = new web3a.eth.Contract(
+      this.state.abi,
+      con.networks[newState.network]['address']
+    );
     this.setState({
+      network: newState.n,
+      contractAddr: con.networks[newState.network]['address'],
       account: newState.account,
       accountShort: newState.accountShort,
       contract: c,
