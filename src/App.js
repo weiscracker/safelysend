@@ -15,7 +15,8 @@ import { AbortTab } from './AbortTab';
 import { AboutTab } from './AboutTab';
 import { CodeTab } from './CodeTab';
 
-import con from './SafelySend.json';
+import conEth from './SafelySend.json';
+import conOpt from './SafelySendOptimism.json';
 import Web3 from 'web3';
 
 export const ConnectWalletBtn = props => {
@@ -26,11 +27,28 @@ export const ConnectWalletBtn = props => {
         method: 'eth_requestAccounts',
       });
       var web3a = new Web3(Web3.givenProvider);
-
+      var isEth = true;
+      var isDeployed = true;
       const n = await web3a.eth.net.getId();
-      if (!con.networks[n]) {
-        window.alert('THIS CONTRACT IS ONLY VALID ON RINKEBY AND MAINNET!');
-      } else {
+      if (!conEth.networks[n]) {
+        isEth = false;
+        if (!conOpt.networks[n]) {
+          isDeployed = false;
+          window.alert(
+            'Contract only deployed on Ethereum Mainnet, Optimism Mainnet, Ethereum Rinkeby, and Optimism Goerli.'
+          );
+        }
+      }
+      if (isDeployed) {
+        var _abi;
+        var _contrAddr;
+        if (isEth) {
+          _abi = conEth.abi;
+          _contrAddr = conEth.networks[n]['address'];
+        } else {
+          _abi = conOpt.abi;
+          _contrAddr = conOpt.networks[n]['address'];
+        }
         const acct = accounts[0];
         const tempState = {
           network: n,
@@ -39,6 +57,8 @@ export const ConnectWalletBtn = props => {
             acct.substring(0, 5) +
             '...' +
             acct.substring(acct.length - 4, acct.length),
+          abi: _abi,
+          contractAddress: _contrAddr,
         };
         props.updateStateCallback(tempState);
       }
@@ -64,7 +84,7 @@ class App extends React.Component {
       account: '',
       accountShort: '',
       contractAddr: '',
-      abi: con.abi,
+      abi: '',
       contract: '',
       web3: '',
     };
@@ -73,16 +93,14 @@ class App extends React.Component {
   updateStateFromConnectWalletButton = newState => {
     var web3a = new Web3(Web3.givenProvider);
 
-    var c = new web3a.eth.Contract(
-      this.state.abi,
-      con.networks[newState.network]['address']
-    );
+    var c = new web3a.eth.Contract(newState.abi, newState.contractAddress);
     this.setState({
       network: newState.n,
-      contractAddr: con.networks[newState.network]['address'],
+      contractAddr: newState.contractAddress,
       account: newState.account,
       accountShort: newState.accountShort,
       contract: c,
+      abi: newState.abi,
       web3: web3a,
     });
   };

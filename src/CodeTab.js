@@ -11,7 +11,18 @@ export const CodeTab = props => {
         }
         isExternal
       >
-        Check out the contract on Etherscan <ExternalLinkIcon mx="2px" />
+        Check out the contract on Etherum Etherscan{' '}
+        <ExternalLinkIcon mx="2px" />
+      </Link>
+      <br></br>
+      <Link
+        href={
+          'https://optimistic.etherscan.io/address/0x88df8dc84426AfDe551acb655042c4660f512Df3#code'
+        }
+        isExternal
+      >
+        Check out the contract on Optimism Etherscan{' '}
+        <ExternalLinkIcon mx="2px" />
       </Link>
     </Box>
   );

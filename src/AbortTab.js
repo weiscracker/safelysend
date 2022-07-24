@@ -79,12 +79,7 @@ export const AbortTab = props => {
     if (validTransactions[0]) {
       return validTransactions.map(trans => {
         return (
-          <Box
-            p={4}
-            m={1}
-            border="1px"
-            key={'Transaction:' + trans.sentTime + trans.to}
-          >
+          <Box p={4} m={1} border="1px" key={'Transaction:' + trans.id}>
             <Text>{'Id: ' + trans.id}</Text>
             <Text>
               {'Sent: ' + new Date(trans.sentTime * 1000).toLocaleString()}
